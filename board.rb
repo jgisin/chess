@@ -1,4 +1,5 @@
 class Board
+
 	  def initialize
     @attributes = {a: [(1..8).to_a],
 			 	   b: [(1..8).to_a],
@@ -12,17 +13,18 @@ class Board
       self.class.send :define_method, k do v end
     end
   end
+
+
+
+
   def display_board
-  	@attributes.values.each do |val|
-     val[0].each do
-  		print "_ "
+  	@attributes.each do |key, array|
+  		print "#{@attributes[key][0]} "
+  		 print "\n"
   	end
-  	print "\n"
-  end
   end
 end
 
 
 board = Board.new
-
 board.display_board
