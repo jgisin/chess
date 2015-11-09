@@ -143,5 +143,48 @@ end
   	end
   end
 
+end
+
+#******************* Class Definition for Knight *******************
+class Knight < Piece
+
+
+ 	def initialize(row, column, color)
+		super
+		@type = "N"
+	end
+		attr_reader :type
+
+
+
+ def check_collision(board, end_row, end_column)
+  	if board[end_row][0][end_column].is_a? Piece
+  		return false
+  	else
+  		return true
+  	end
+  end
+
+  def logic(board, end_row, end_column)
+  	if self.type == 'N'
+
+  		if (self.row + 2 == end_row) || (self.row - 2 == end_row)
+  			if (self.column + 1 == end_column) || (self.column - 1 == end_column)
+  				return true
+  			else
+  				return false
+  			end
+
+  		elsif (self.column + 2 == end_column) || (self.column - 2 == end_column)
+  			if (self.row + 1 == end_row) || (self.row - 1 == end_row)
+  				return true
+  			else
+  				return false
+  			end
+  		else
+  			return false
+  		end
+  	end
+  end
 
 end
