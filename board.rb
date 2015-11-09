@@ -55,10 +55,10 @@ class Board
 
 
 #Update piece board and color board with move
-  def update_board_move(row, piece, end_row, end_piece)
-  	if pawn_logic(row, piece, end_row, end_piece)
-  	 @board[end_row][0][end_piece] =  @board[row][0][piece]
-  	 @board[row][0][piece] = '_'.to_s.gsub('"', '').gsub(',', '')	
+  def update_board_move(piece, end_row, end_column)
+  	if piece.logic(self.board, end_row, end_column)
+  	 self.board[end_row][0][end_column] =  self.board[piece.row][0][piece.column]
+  	 self.board[piece.row][0][piece.column] = '_'.to_s.gsub('"', '').gsub(',', '')	
   	 return true
   	else
   		puts "Invalid Move"
@@ -66,25 +66,25 @@ class Board
   	end
   end
 
-  def update_color_move(row, piece, end_row, end_piece)
-  	 @color[end_row][0][end_piece] =  @color[row][0][piece]
-  	 @color[row][0][piece] = '_'.to_s.gsub('"', '')
+  def update_color_move(piece, end_row, end_column)
+  	 self.color[end_row][0][end_column] =  self.color[piece.row][0][piece.column]
+  	 self.color[piece.row][0][piece.column] = '_'.to_s.gsub('"', '')
   end
 
 
 
 #Move function
-  def move_piece(row, piece, end_row, end_piece)
-  	if update_board_move(row, piece, end_row, end_piece)
-  		update_color_move(row, piece, end_row, end_piece)
+  def move_piece(piece, end_row, end_column)
+  	if update_board_move(piece, end_row, end_column)
+  		update_color_move(piece, end_row, end_column)
   	end
   end
 
 #Display Function
-  def display_board(var)
+  def display_board(board)
   	puts "---------------------"
-  	var.each do |key, array|
-  		print "| #{var[key][0]} |"
+  	board.each do |key, array|
+  		print "| #{board[key][0]} |"
   		 print "\n"
   	end
   	puts "---------------------"

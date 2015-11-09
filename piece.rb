@@ -1,12 +1,16 @@
-require_relative 'board'
+
 
 class Piece
 
-	#Checks for piece and color
-  def color(board, piece)
-  	return board.color[piece.row][0][piece.column]
-  end
+	def initialize(row, column, color)
+		@row = row
+		@column = column
+		@color = color
+	end
 
+	attr_accessor :row
+	attr_accessor :column
+	attr_reader :color
 
 end
 
@@ -14,20 +18,17 @@ end
 
 class Pawn < Piece
 
-	def initialize(row, column)
+	def initialize(row, column, color)
+		super
 		@type = "P"
-		@row = row
-		@column = column
 	end
 
-	attr_accessor :type
-	attr_accessor :row
-	attr_accessor :column
+	attr_reader :type
 
-  def logic(object, board, end_row, end_column)
-  	if board[object.row][0][object.column] == 'P'
-  		if end_row - object.row == 1 || object.row - end_row == 1
-  			if end_column == object.column
+  def logic(board, end_row, end_column)
+  	if board[self.row][0][self.column] == 'P'
+  		if end_row - self.row == 1 || self.row - end_row == 1
+  			if end_column == self.column
   				return true
   			else
   				return false
@@ -58,10 +59,3 @@ end
 
   #end
 end
-
-
-b = Board.new
-p = Pawn.new(7, 1)
-puts p.logic(p, b.board, 6, 1)
-puts p.type
-puts p.color(b, p)
