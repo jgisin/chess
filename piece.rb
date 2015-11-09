@@ -317,3 +317,37 @@ class Queen < Piece
   		end
 	end
 end
+
+#******************* Class Definition for King *******************
+
+class King < Piece
+
+	def initialize(row, column, color)
+		super
+		@type = "K"
+		@in_check = false
+	end
+	attr_reader :type
+	attr_accessor :in_check
+
+
+	def check_collision(board, end_row, end_column)
+		if board[end_row][0][end_column].is_a? Piece
+	  		return false
+	  	else
+	  		return true
+	  	end
+  	end
+
+  	def logic(end_row, end_column)
+  		if (self.row - end_row).abs == 1 && (self.column - end_column).abs == 1
+  			return true
+  		elsif (self.row - end_row).abs == 1 && (self.column - end_column).abs == 0
+  			return true
+  		elsif (self.row - end_row).abs == 0 && (self.column - end_column).abs == 1
+  			return true
+  		else
+  			return false
+  		end
+  	end
+end
