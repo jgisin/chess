@@ -1,5 +1,6 @@
 class Board
 
+#Set board dimensions and accessors
 	  def initialize
     @board = {     1 => [(1..8).to_a],
 			 	   2 => [(1..8).to_a],
@@ -21,12 +22,14 @@ class Board
 			 	   7 => [(1..8).to_a],
 			 	   8 => [(1..8).to_a]
 			 	}
+		set_pieces
   end
 
-
+#Accessors for boards
     attr_reader :board
     attr_reader :color
 
+#Populates boards for new game
   def set_pieces
 	  @board[1][0] = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'].to_s.gsub('"', '').gsub(',', '')  
 	  @board[2][0] = ['P','P','P','P','P','P','P','P'].to_s.gsub('"', '').gsub(',', '')  
@@ -47,20 +50,11 @@ class Board
 	  @color[8][0] = ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B'].to_s.gsub('"', '').gsub(',', '') 
   end
 
-  def pawn_logic(row, piece, end_row, end_piece)
-  	if @board[row][0][piece] == 'P'
-  		if end_row - row == 1 || row - end_row == 1
-  			if end_piece == piece
-  				return true
-  			else
-  				return false
-  			end
-  		else
-  			return false
-  		end
-  	end
-  end
 
+
+
+
+#Update piece board and color board with move
   def update_board_move(row, piece, end_row, end_piece)
   	if pawn_logic(row, piece, end_row, end_piece)
   	 @board[end_row][0][end_piece] =  @board[row][0][piece]
@@ -77,13 +71,16 @@ class Board
   	 @color[row][0][piece] = '_'.to_s.gsub('"', '')
   end
 
+
+
+#Move function
   def move_piece(row, piece, end_row, end_piece)
   	if update_board_move(row, piece, end_row, end_piece)
   		update_color_move(row, piece, end_row, end_piece)
   	end
   end
 
-
+#Display Function
   def display_board(var)
   	puts "---------------------"
   	var.each do |key, array|
@@ -95,8 +92,3 @@ class Board
 end
 
 
-
-board = Board.new
-board.set_pieces
-board.display_board(board.board)
-board.display_board(board.color)
