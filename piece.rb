@@ -21,22 +21,58 @@ class Pawn < Piece
 	def initialize(row, column, color)
 		super
 		@type = "P"
+		@times_moved = 0
 	end
 
 	attr_reader :type
+	attr_accessor :times_moved
 
   def logic(board, end_row, end_column)
-  	if board[self.row][0][self.column] == 'P'
-  		if end_row - self.row == 1 || self.row - end_row == 1
-  			if end_column == self.column
-  				return true
-  			else
-  				return false
-  			end
-  		else
-  			return false
-  		end
-  	end
+  	if self.times_moved == 0
+	  	if self.type == 'P' && self.color == "W"
+	  		if end_row - self.row <= 2 && end_row - self.row > 0
+	  			if end_column == self.column
+	  				return true
+	  			else
+	  				return false
+	  			end
+	  		else
+	  			return false
+	  		end
+	  	elsif self.type == 'P' && self.color == "B"
+	  		if end_row - self.row >= -2 && end_row - self.row < 0
+	  			if end_column == self.column
+	  				return true
+	  			else
+	  				return false
+	  			end
+	  		else
+	  			return false
+	  		end
+	  	end
+	 else
+	  	if self.type == 'P' && self.color == "W"
+	  		if end_row - self.row == 1
+	  			if end_column == self.column
+	  				return true
+	  			else
+	  				return false
+	  			end
+	  		else
+	  			return false
+	  		end
+	  	elsif self.type == 'P' && self.color == "B"
+	  		if end_row - self.row == -1 
+	  			if end_column == self.column
+	  				return true
+	  			else
+	  				return false
+	  			end
+	  		else
+	  			return false
+	  		end
+	  	end
+	  end
   end
 
 end
