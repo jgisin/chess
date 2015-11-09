@@ -39,7 +39,7 @@ end
 		  	 	piece.times_moved += 1
 		  	 end
 	  	else
-	  		puts "Invalid Move - Logic/Collision"
+	  		puts "Invalid Move - Logic/Collision (#{piece.logic(end_row, end_column)},#{piece.check_collision(self.board, end_row, end_column)}) "
 	  	end
 	 else
 	 	puts "Invalid Move - Coord"
@@ -48,9 +48,9 @@ end
 
 #Display Function
   def display_board
-  	puts " -------------------"
+  	puts "R -------------------"
   	self.board.each do |key, array|
-  		print " | "
+  		print "#{key} | "
         self.board[key][0].each_with_index do |item, index|
 	      	if self.board[key][0][index].is_a? Piece
 	  			print "#{self.board[key][0][index].type.to_s.gsub('"', '').gsub(',', '') } "
@@ -60,7 +60,8 @@ end
   		end
   			  		 print "|\n"
   	end
-  	puts " -------------------"
+  	puts "  -------------------"
+  	puts "C-- 1 2 3 4 5 6 7 8"
   end
 end
 
