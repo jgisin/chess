@@ -1,5 +1,5 @@
 
-
+#******************* Class Definition for Piece *******************
 class Piece
 
 	def initialize(row, column, color)
@@ -15,7 +15,7 @@ class Piece
 end
 
 
-
+#******************* Class Definition for Pawn *******************
 class Pawn < Piece
 
 	def initialize(row, column, color)
@@ -28,7 +28,11 @@ class Pawn < Piece
 	attr_accessor :times_moved
 
   def check_collision(board, end_row, end_column)
-  	return true
+  	if board[end_row][0][end_column].is_a? Piece
+  		return false
+  	else
+  		return true
+  	end
   end
 
   def logic(board, end_row, end_column)
@@ -83,6 +87,7 @@ class Pawn < Piece
 
 end
 
+#******************* Class Definition for Rook *******************
  class Rook < Piece
 
  	def initialize(row, column, color)

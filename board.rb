@@ -17,21 +17,32 @@ class Board
     attr_reader :board
     attr_reader :color
 
+def valid_coord(end_row, end_column)
+	if (end_row < 9 && end_row > 0) && (end_column < 9 && end_column >= 0)
+		return true
+	else
+		return false
+	end
+end
 
 
 #Move function
   def move_piece(piece, end_row, end_column)
-  	if piece.logic(self.board, end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
-  	 self.board[end_row][0][end_column] =  self.board[piece.row][0][piece.column]
-  	 self.board[piece.row][0][piece.column] = '_'
-  	 piece.row = end_row
-  	 piece.column = end_column	
-	  	 if piece.type == "P"
-	  	 	piece.times_moved += 1
-	  	 end
-  	else
-  		puts "Invalid Move"
-  	end
+  	if valid_coord(end_row, end_column)
+	  	if piece.logic(self.board, end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
+	  	 self.board[end_row][0][end_column] =  self.board[piece.row][0][piece.column]
+	  	 self.board[piece.row][0][piece.column] = '_'
+	  	 piece.row = end_row
+	  	 piece.column = end_column	
+		  	 if piece.type == "P"
+		  	 	piece.times_moved += 1
+		  	 end
+	  	else
+	  		puts "Invalid Move"
+	  	end
+	 else
+	 	puts "Invalid Move"
+	 end
   end
 
 #Display Function

@@ -6,7 +6,7 @@ require_relative 'board'
 class Game
 	def initialize
 	  @b = Board.new
-	  b.board[1][0] = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+	  b.board[1][0] = [@rw1 = Rook.new(1,0,"W"), 'N', 'B', 'Q', 'K', 'B', 'N', @rw2 = Rook.new(8,0,"W")]
 	  b.board[2][0] = [@pw1 = Pawn.new(2,0,"W"), @pw2 = Pawn.new(2,1,"W"), @pw3 = Pawn.new(2,2,"W"),
 	   				   @pw4 = Pawn.new(2,3,"W"), @pw5 = Pawn.new(2,4,"W"), @pw6 = Pawn.new(2,5,"W"),
 	   				   @pw7 = Pawn.new(2,6,"W"), @pw8 = Pawn.new(2,7,"W"),]
@@ -20,16 +20,14 @@ class Game
 	  b.board[8][0] = [@rb1 = Rook.new(8,0,"B"), 'N', 'B', 'Q', 'K', 'B', 'N', @rb2 = Rook.new(8,7,"B")] 
 	end
 	attr_reader :b
-	attr_accessor :pw1, :pw2, :pw3, :pw4, :pw5, :pw6, :pw7, :pw8, :rb1, :rb2
-	attr_accessor :pb1, :pb2, :pb3, :pb4, :pb5, :pb6, :pb7, :pb8
+	attr_accessor :pw1, :pw2, :pw3, :pw4, :pw5, :pw6, :pw7, :pw8, :rw1, :rw2
+	attr_accessor :pb1, :pb2, :pb3, :pb4, :pb5, :pb6, :pb7, :pb8, :rb1, :rb2
 end
 
 g = Game.new
 
-g.b.move_piece(g.pb1, 5, 0)
-puts g.rb1.row, g.rb1.column
-#puts (g.rb1.row..6).to_a
-g.b.move_piece(g.rb1, 6, 0)
-g.b.move_piece(g.rb1, 6, 1)
-g.b.move_piece(g.rb1, 7, 1)
+g.b.move_piece(g.pw1, 4, 0)
+g.b.move_piece(g.pw1, 5, 0)
+g.b.move_piece(g.pw1, 6, 0)
+g.b.move_piece(g.pw1, 7, 0)
 g.b.display_board
