@@ -35,7 +35,7 @@ class Pawn < Piece
   	end
   end
 
-  def logic(board, end_row, end_column)
+  def logic(end_row, end_column)
   	#Pawn can move two squares on first move
   	if self.times_moved == 0
 	  	if self.type == 'P' && self.color == "W"
@@ -131,7 +131,7 @@ end
 	  end
   end
 
-  def logic(board, end_row, end_column)
+  def logic(end_row, end_column)
   	if self.type == 'R'
   		if self.column == end_column && self.row != end_row
   			return true
@@ -165,7 +165,7 @@ class Knight < Piece
   	end
   end
 
-  def logic(board, end_row, end_column)
+  def logic(end_row, end_column)
   	if self.type == 'N'
 
   		if (self.row + 2 == end_row) || (self.row - 2 == end_row)
@@ -181,10 +181,58 @@ class Knight < Piece
   			else
   				return false
   			end
+
   		else
   			return false
   		end
   	end
   end
 
+end
+
+#******************* Class Definition for Bishop *******************
+
+class Bishop < Piece
+
+ 	def initialize(row, column, color)
+		super
+		@type = "B"
+	end
+		attr_reader :type
+
+	def check_collision(board, end_row, end_column)
+		if self.row < end_row
+			test_row = (self.row..end_row).to_a
+	  		test_row.delete(test_row.first)
+	  	elsif end_row < self.row
+	  		test_row = (end_row..self.row).to_a
+	  		test_row.delete(test_row.last)
+	  	end
+
+	  	if self.column < end_column
+	  		test_column = (self.column..end_column).to_a
+	  		test_column.delete(test_column.first)
+	  	elsif end_column < self.column
+	  		test_column = (end_column..self.column).to_a
+	  		test_column.delete(test_column.last)
+	  	end
+
+	  	test_row.each_with_index do |value, index|
+			if board[test_row[index]][0][test_column[index]].is_a? Piece
+				return false
+			elsif board[end_row][0][end_column].is_a? Piece
+				return false
+			else
+				return true
+			end
+		end
+	end
+
+	def logic(end_row, end_column)
+		if (self.column - end_column).abs == (self.row - end_row).abs
+			return true
+		else
+			return false
+		end
+	end
 end

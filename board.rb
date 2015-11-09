@@ -22,6 +22,7 @@ def valid_coord(end_row, end_column)
 		return true
 	else
 		return false
+		puts "invalid coord"
 	end
 end
 
@@ -29,7 +30,7 @@ end
 #Move function
   def move_piece(piece, end_row, end_column)
   	if valid_coord(end_row, end_column)
-	  	if piece.logic(self.board, end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
+	  	if piece.logic(end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
 	  	 self.board[end_row][0][end_column] =  self.board[piece.row][0][piece.column]
 	  	 self.board[piece.row][0][piece.column] = '_'
 	  	 piece.row = end_row
@@ -38,10 +39,10 @@ end
 		  	 	piece.times_moved += 1
 		  	 end
 	  	else
-	  		puts "Invalid Move"
+	  		puts "Invalid Move - Logic/Collision"
 	  	end
 	 else
-	 	puts "Invalid Move"
+	 	puts "Invalid Move - Coord"
 	 end
   end
 
