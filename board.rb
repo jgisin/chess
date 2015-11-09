@@ -21,9 +21,9 @@ class Board
 
 #Move function
   def move_piece(piece, end_row, end_column)
-  	if piece.logic(self.board, end_row, end_column)
+  	if piece.logic(self.board, end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
   	 self.board[end_row][0][end_column] =  self.board[piece.row][0][piece.column]
-  	 self.board[piece.row][0][piece.column] = '_'.to_s.gsub('"', '').gsub(',', '')
+  	 self.board[piece.row][0][piece.column] = '_'
   	 piece.row = end_row
   	 piece.column = end_column	
 	  	 if piece.type == "P"
