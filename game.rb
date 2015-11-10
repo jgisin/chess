@@ -33,5 +33,8 @@ end
 g = Game.new
 
 
-g.b.move_piece(g.qb1, 6, 5)
+g.b.move_piece(g.pb1, 5, 0)
+g.b.move_piece(g.pb1, 4, 0)
+g.b.move_piece(g.pb1, 3, 0)
+g.b.move_piece(g.pb1, 2, 1)
 g.b.display_board

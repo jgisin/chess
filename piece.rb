@@ -38,7 +38,7 @@ class Pawn < Piece
   def logic(end_row, end_column)
   	#Pawn can move two squares on first move
   	if self.times_moved == 0
-	  	if self.type == 'P' && self.color == "W"
+	  	if self.color == "W"
 	  		if end_row - self.row <= 2 && end_row - self.row > 0
 	  			if end_column == self.column
 	  				return true
@@ -48,7 +48,7 @@ class Pawn < Piece
 	  		else
 	  			return false
 	  		end
-	  	elsif self.type == 'P' && self.color == "B"
+	  	elsif self.color == "B"
 	  		if end_row - self.row >= -2 && end_row - self.row < 0
 	  			if end_column == self.column
 	  				return true
@@ -61,7 +61,7 @@ class Pawn < Piece
 	  	end
 	 else
 	 #Pawn moves only one square forward on all other moves
-	  	if self.type == 'P' && self.color == "W"
+	  	if self.color == "W"
 	  		if end_row - self.row == 1
 	  			if end_column == self.column
 	  				return true
@@ -71,7 +71,7 @@ class Pawn < Piece
 	  		else
 	  			return false
 	  		end
-	  	elsif self.type == 'P' && self.color == "B"
+	  	elsif self.color == "B"
 	  		if end_row - self.row == -1 
 	  			if end_column == self.column
 	  				return true
@@ -83,6 +83,31 @@ class Pawn < Piece
 	  		end
 	  	end
 	  end
+  end
+
+  def can_take?(board, end_row, end_column)
+  	if self.color == "B"
+	  	if (end_row - self.row) == -1 && (self.column - end_column).abs == 1 
+			if self.check_collision(board, end_row, end_column) == false
+				return true
+			else
+				return false
+			end
+		else
+			return false
+		end
+	end
+	if self.color == "W"
+	  	if (end_row - self.row) == 1 && (self.column - end_column).abs == 1 
+			if self.check_collision(board, end_row, end_column) == false
+				return true
+			else
+				return false
+			end
+		else
+			return false
+		end
+	end
   end
 
 end

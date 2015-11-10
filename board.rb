@@ -17,30 +17,45 @@ class Board
     attr_reader :board
     attr_reader :color
 
-def valid_coord(end_row, end_column)
-	if (end_row < 9 && end_row > 0) && (end_column < 9 && end_column >= 0)
-		return true
-	else
-		return false
-		puts "invalid coord"
+    def find_piece(board, row, column)
+    	if board.board[row][0][column].is_a? Piece
+    		return board.board[row][0][column]
+    	end
+    end
+
+	def valid_coord(end_row, end_column)
+		if (end_row < 9 && end_row > 0) && (end_column < 9 && end_column >= 0)
+			return true
+		else
+			return false
+			puts "invalid coord"
+		end
 	end
-end
 
-
-#Move function
-  def move_piece(piece, end_row, end_column)
-  	if valid_coord(end_row, end_column)
-	  	if piece.logic(end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
-	  	 self.board[end_row][0][end_column] =  self.board[piece.row][0][piece.column]
+	def replace_piece(piece, end_row, end_column)
+		 self.board[end_row][0][end_column] =  self.board[piece.row][0][piece.column]
 	  	 self.board[piece.row][0][piece.column] = '_'
 	  	 piece.row = end_row
 	  	 piece.column = end_column	
 		  	 if piece.type == "P"
 		  	 	piece.times_moved += 1
 		  	 end
-	  	else
-	  		puts "Invalid Move - Logic/Collision (#{piece.logic(end_row, end_column)},#{piece.check_collision(self.board, end_row, end_column)}) "
-	  	end
+	end
+
+#Move function
+  def move_piece(piece, end_row, end_column)
+  	if valid_coord(end_row, end_column)
+  		if piece.can_take?(self.board, end_row, end_column)
+  		  	replace_piece(piece, end_row, end_column)
+		else  
+		  	if piece.logic(end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
+		  		replace_piece(piece, end_row, end_column)
+		  	else
+		  		print "Invalid Move - Logic/Collision (#{piece.logic(end_row, end_column)},"
+		  		print " #{piece.check_collision(self.board, end_row, end_column)},"
+		  		print " #{piece.can_take?(self.board, end_row, end_column)})\n"
+		  	end
+		end
 	 else
 	 	puts "Invalid Move - Coord"
 	 end
@@ -48,6 +63,7 @@ end
 
 #Display Function
   def display_board
+  	#puts `clear`
   	puts "R -------------------"
   	self.board.each do |key, array|
   		print "#{key} | "
@@ -61,7 +77,7 @@ end
   			  		 print "|\n"
   	end
   	puts "  -------------------"
-  	puts "C-- 1 2 3 4 5 6 7 8"
+  	puts "C   1 2 3 4 5 6 7 8"
   end
 end
 
