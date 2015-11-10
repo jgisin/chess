@@ -46,9 +46,6 @@ class Board
 #Move function
   def move_piece(piece, end_row, end_column)
   	if valid_coord(end_row, end_column)
-  		if piece.can_take?(self.board, end_row, end_column)
-  		  	replace_piece(piece, end_row, end_column)
-		else  
 		  	if piece.logic(end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
 		  		replace_piece(piece, end_row, end_column)
 		  	else
@@ -56,7 +53,6 @@ class Board
 		  		print " #{piece.check_collision(self.board, end_row, end_column)},"
 		  		print " #{piece.can_take?(self.board, end_row, end_column)})\n"
 		  	end
-		end
 	 else
 	 	puts "Invalid Move - Coord"
 	 end

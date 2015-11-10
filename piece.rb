@@ -8,9 +8,37 @@ class Piece
 		@color = color
 	end
 
-	attr_accessor :row
-	attr_accessor :column
+	attr_accessor :row, :column
 	attr_reader :color
+
+	def valid_moves(board, end_row, end_column)
+		board.board.each do |row, not_used|
+			board.board[row][0].each_with_index do |value, column|
+				if self.logic(row, column)
+					print "#{row},#{column} "
+					print "Logic Passes "
+					if (self.check_collision(board.board, row, column) == false) &&
+					   (end_row != row || end_column != column)
+					    print "Collision-Non-Target \n"
+						next
+					elsif (self.check_collision(board.board, row, column) == false) &&
+					      (self.color == board.board[row][0][column].color)
+					    print "Collision-Same-Color \n"
+						next
+					elsif (self.check_collision(board.board, row, column) == false) &&
+					      (self.color != board.board[row][0][column].color)
+					    print "Collision-Take \n"
+					else
+						print "No Collision \n"
+						next 
+					end
+				else
+					print "#{row},#{column} "
+					print "Logic Fails \n"
+				end
+			end
+		end
+	end
 
 end
 
@@ -121,6 +149,11 @@ end
 	end
 		attr_reader :type
 
+
+	def can_take?(board, end_row, end_column)
+		return true
+	end
+
   def check_collision(board, end_row, end_column)
   	  if self.column == end_column && self.row != end_row
   	  	if self.row < end_row
@@ -131,8 +164,14 @@ end
 	  	 	test.delete(test.last)
 	  	 end
   	  	test.each do |row|
-  	  		if board[row][0][self.column].is_a? Piece
+  	  		if (board[row][0][self.column].is_a? Piece) && (row != end_row)
   	  			return false
+  	  		elsif (board[row][0][self.column].is_a? Piece) && (row == end_row)
+	  			if row == end_row && self.color == board[row][0][self.column].color
+	  				return false
+	  			elsif row == end_row && self.color != board[row][0][self.column].color
+	  				return true
+	  			end
   	  		end	
   	  	end
   	  	return true
@@ -140,14 +179,20 @@ end
 	   if self.row == end_row && self.column != end_column
 		   	if self.column < end_column
 			   	test = (self.column..end_column).to_a
-		  	  	test.delete(test.first)
+		  	  	test.delete(test.first) 
 		  	else
 		  		test = (end_column..self.column).to_a
 		  		test.delete(test.last)
 		  	end
 	  	test.each do |column|
-	  		if board[self.row][0][column].is_a? Piece 
+	  		if (board[self.row][0][column].is_a? Piece) && (column != end_column)
 	  			return false
+	  		elsif (board[self.row][0][column].is_a? Piece) && (column == end_column)
+	  			if column == end_column && self.color == board[self.row][0][column].color
+	  				return false
+	  			elsif column == end_column && self.color != board[self.row][0][column].color
+	  				return true
+	  			end
 	  		end	
 	  	end
 	  	return true
@@ -155,7 +200,6 @@ end
   end
 
   def logic(end_row, end_column)
-  	if self.type == 'R'
   		if self.column == end_column && self.row != end_row
   			return true
   		elsif self.row == end_row && self.column != end_column
@@ -163,7 +207,6 @@ end
   		else
   			return false
   		end
-  	end
   end
 
 end
@@ -365,9 +408,10 @@ class King < Piece
 		super
 		@type = "K"
 		@in_check = false
+		@times_moved = 0
 	end
 	attr_reader :type
-	attr_accessor :in_check
+	attr_accessor :in_check, :times_moved
 
 
 	def check_collision(board, end_row, end_column)
