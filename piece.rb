@@ -18,22 +18,25 @@ class Piece
 					print "#{row},#{column + 1} "
 					print "Logic Passes "
 					if (self.check_collision(board.board, row, column) == false) &&
-					   (board.board[row][0][column].is_a? Piece)
+					   (value.is_a? Piece)
 					    print "Collision-Non-Target \n"
 						next
 					elsif (self.check_collision(board.board, row, column) == false) &&
-					      (board.board[row][0][column].is_a? Piece) &&
-					      (self.color == board.board[row][0][column].color)
+					      (value.is_a? Piece) &&
+					      (self.color == value.color)
 					    print "Collision-Same-Color \n"
 						next
 					elsif (self.check_collision(board.board, row, column) == true) &&
-					      (board.board[row][0][column].is_a? Piece) &&
-					      (self.color != board.board[row][0][column].color)
+					      (value.is_a? Piece) &&
+					      (self.color != value.color)
 					    print "Collision-Take \n"
 					else
 						print "No Collision \n"
 						next 
 					end
+				elsif self.logic(row, column) == false
+					print "#{row},#{column} "
+					print "Logic Fails \n"
 				else
 					print "#{row},#{column} "
 					print "Logic Fails \n"
@@ -297,8 +300,8 @@ class Bishop < Piece
 	  		test_column = (self.column..end_column).to_a
 	  		test_column.delete(test_column.first)
 	  	elsif end_column < self.column
-	  		test_column = (end_column..self.column).to_a
-	  		test_column.delete(test_column.last)
+	  		test_column = (end_column..self.column).to_a.reverse
+	  		test_column.delete(test_column.first)
 	  	else
 	  		return false
 	  	end
@@ -309,7 +312,7 @@ class Bishop < Piece
 				return false
 			elsif (board[value][0][test_column[index]].is_a? Piece) &&
 				  (value == end_row && test_column[index] == end_column)
-				if board[value][0][index].color == self.color
+				if board[value][0][test_column[index]].color == self.color
 					return false
 				elsif board[end_row][0][end_column].color != self.color
 					return true
@@ -340,63 +343,18 @@ class Queen < Piece
 	attr_reader :type
 
 	def check_collision(board, end_row, end_column)
-		#Rook Collision Test
-  	  if self.column == end_column && self.row != end_row
-  	  	if self.row < end_row
-	  	  	test = (self.row..end_row).to_a
-	  	  	test.delete(test.first)
-	  	 else
-	  	 	test = (end_row..self.row).to_a
-	  	 	test.delete(test.last)
-	  	 end
-  	  	test.each do |row|
-  	  		if board[row][0][self.column].is_a? Piece
-  	  			return false
-  	  		end	
-  	  	end
-  	  	return true
-  	  end
-	   if self.row == end_row && self.column != end_column
-		   	if self.column < end_column
-			   	test = (self.column..end_column).to_a
-		  	  	test.delete(test.first)
-		  	else
-		  		test = (end_column..self.column).to_a
-		  		test.delete(test.last)
-		  	end
-	  	test.each do |column|
-	  		if board[self.row][0][column].is_a? Piece 
-	  			return false
-	  		end	
-	  	end
-	  	return true
-	  end
+	#Rook Collision Test
+	test_rook = Rook.new(self.row,self.column,"W")
+	#Bishop Collision Test
+	test_bishop = Bishop.new(self.row,self.column,"W")
 
-	  #Bishop Collision Test
-	  if self.row < end_row
-			test_row = (self.row..end_row).to_a
-	  		test_row.delete(test_row.first)
-	  	elsif end_row < self.row
-	  		test_row = (end_row..self.row).to_a
-	  		test_row.delete(test_row.last)
-	  	end
 
-	  	if self.column < end_column
-	  		test_column = (self.column..end_column).to_a
-	  		test_column.delete(test_column.first)
-	  	elsif end_column < self.column
-	  		test_column = (end_column..self.column).to_a
-	  		test_column.delete(test_column.last)
-	  	end
-
-	  	test_row.each_with_index do |value, index|
-			if board[value][0][test_column[index]].is_a? Piece
-				return false
-			elsif board[end_row][0][end_column].is_a? Piece
-				return false
-			end
+		if test_rook.check_collision(board, end_row, end_column) ||
+		   test_bishop.check_collision(board, end_row, end_column)
+		   return true
+		else
+			return false
 		end
-		return true
 	end
 
 	def logic(end_row, end_column)
