@@ -179,8 +179,22 @@ class Knight < Piece
 		attr_reader :type
 
 
+  def can_take?(board, end_row, end_column)
+  	if self.color == "W"
+  		if board[end_row][0][end_column].color == "B"
+  			return true
+  		end
+  	elsif self.color == "B"
+  		if board[end_row][0][end_column].color == "W"
+  			return true
+  		end
+  	else
+  		return false
+  	end
+  end
 
- def check_collision(board, end_row, end_column)
+
+  def check_collision(board, end_row, end_column)
   	if board[end_row][0][end_column].is_a? Piece
   		return false
   	else

@@ -1,3 +1,4 @@
+require 'colorize'
 class Board
 
 #Set board dimensions and accessors
@@ -63,18 +64,46 @@ class Board
 
 #Display Function
   def display_board
+  	background = 0
   	#puts `clear`
   	puts "R -------------------"
   	self.board.each do |key, array|
   		print "#{key} | "
         self.board[key][0].each_with_index do |item, index|
-	      	if self.board[key][0][index].is_a? Piece
-	  			print "#{self.board[key][0][index].type.to_s.gsub('"', '').gsub(',', '') } "
-	  		else
-	  			print "#{self.board[key][0][index].to_s.gsub('"', '').gsub(',', '') } "
-	  	    end
+        	if background == 0
+		      	if self.board[key][0][index].is_a? Piece
+			      		if self.board[key][0][index].color == "W"
+			  				print "#{self.board[key][0][index].type.to_s.gsub('"', '').gsub(',', '')} ".colorize(:cyan)
+			  				background += 1
+			  			elsif self.board[key][0][index].color == "B"
+			  				print "#{self.board[key][0][index].type.to_s.gsub('"', '').gsub(',', '')} ".colorize(:magenta)
+			  				background += 1
+			  			end
+		  		else
+		  			print "#{self.board[key][0][index].to_s.gsub('"', '').gsub(',', '') } "
+		  	    	background += 1
+		  	    end
+		  	else
+		  		if self.board[key][0][index].is_a? Piece
+			      		if self.board[key][0][index].color == "W"
+			  				print "#{self.board[key][0][index].type.to_s.gsub('"', '').gsub(',', '')} ".colorize(:cyan).on_black
+			  				background -= 1
+			  			elsif self.board[key][0][index].color == "B"
+			  				print "#{self.board[key][0][index].type.to_s.gsub('"', '').gsub(',', '')} ".colorize(:magenta).on_black
+			  				background -= 1
+			  			end
+		  		else
+		  			print "#{self.board[key][0][index].to_s.gsub('"', '').gsub(',', '') } ".on_black
+		  			background -= 1
+		  	    end
+		  	end
   		end
   			  		 print "|\n"
+  			  		 if background == 1
+  			  		 	background = 0
+  			  		 else
+  			  		 	background = 1
+  			  		 end
   	end
   	puts "  -------------------"
   	puts "C   1 2 3 4 5 6 7 8"
