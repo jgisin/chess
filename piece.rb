@@ -15,17 +15,19 @@ class Piece
 		board.board.each do |row, not_used|
 			board.board[row][0].each_with_index do |value, column|
 				if self.logic(row, column)
-					print "#{row},#{column} "
+					print "#{row},#{column + 1} "
 					print "Logic Passes "
 					if (self.check_collision(board.board, row, column) == false) &&
-					   (end_row != row || end_column != column)
+					   (board.board[row][0][column].is_a? Piece)
 					    print "Collision-Non-Target \n"
 						next
 					elsif (self.check_collision(board.board, row, column) == false) &&
+					      (board.board[row][0][column].is_a? Piece) &&
 					      (self.color == board.board[row][0][column].color)
 					    print "Collision-Same-Color \n"
 						next
-					elsif (self.check_collision(board.board, row, column) == false) &&
+					elsif (self.check_collision(board.board, row, column) == true) &&
+					      (board.board[row][0][column].is_a? Piece) &&
 					      (self.color != board.board[row][0][column].color)
 					    print "Collision-Take \n"
 					else
@@ -287,6 +289,8 @@ class Bishop < Piece
 	  	elsif end_row < self.row
 	  		test_row = (end_row..self.row).to_a
 	  		test_row.delete(test_row.last)
+	  	else
+	  		return false
 	  	end
 
 	  	if self.column < end_column
@@ -295,13 +299,21 @@ class Bishop < Piece
 	  	elsif end_column < self.column
 	  		test_column = (end_column..self.column).to_a
 	  		test_column.delete(test_column.last)
+	  	else
+	  		return false
 	  	end
 
 	  	test_row.each_with_index do |value, index|
-			if board[value][0][test_column[index]].is_a? Piece
+			if (board[value][0][test_column[index]].is_a? Piece) &&
+				(value != end_row || test_column[index] != end_column)
 				return false
-			elsif board[end_row][0][end_column].is_a? Piece
-				return false
+			elsif (board[value][0][test_column[index]].is_a? Piece) &&
+				  (value == end_row && test_column[index] == end_column)
+				if board[value][0][index].color == self.color
+					return false
+				elsif board[end_row][0][end_column].color != self.color
+					return true
+				end
 			end
 		end
 		return true

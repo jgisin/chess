@@ -38,7 +38,7 @@ class Board
 	  	 self.board[piece.row][0][piece.column] = '_'
 	  	 piece.row = end_row
 	  	 piece.column = end_column	
-		  	 if piece.type == "P"
+		  	 if piece.type == "P" || piece.type == "K"
 		  	 	piece.times_moved += 1
 		  	 end
 	end
@@ -50,8 +50,7 @@ class Board
 		  		replace_piece(piece, end_row, end_column)
 		  	else
 		  		print "Invalid Move - Logic/Collision (#{piece.logic(end_row, end_column)},"
-		  		print " #{piece.check_collision(self.board, end_row, end_column)},"
-		  		print " #{piece.can_take?(self.board, end_row, end_column)})\n"
+		  		print " #{piece.check_collision(self.board, end_row, end_column)}) \n"
 		  	end
 	 else
 	 	puts "Invalid Move - Coord"
