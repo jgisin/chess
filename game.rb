@@ -66,5 +66,9 @@ end
 
 g = Game.new
 
-
-g.game_loop
+g.b.move_piece(g.pw4, 4, 3, "W")
+g.b.move_piece(g.qw1, 3, 3, "W")
+g.b.move_piece(g.qw1, 4, 4, "W")
+g.qw1.valid_moves(g.b, 1, 1)
+g.b.display_board
+#g.game_loop

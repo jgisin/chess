@@ -31,7 +31,7 @@ class Piece
 					      (self.color != value.color))
 					    print "Collision-Take \n"
 					else
-						print "No Collision \n"
+						print "Collision Passes \n"
 						next 
 					end
 				elsif (self.logic(board.board, row, column) == false) &&
@@ -307,9 +307,6 @@ class Bishop < Piece
 	  	elsif end_row < self.row
 	  		test_row = (end_row..self.row).to_a
 	  		test_row.delete(test_row.last)
-	  		if test_row.is_a? Fixnum
-	  			test_row = [test_row]
-	  		end
 	  	else
 	  		return false
 	  	end
@@ -317,30 +314,43 @@ class Bishop < Piece
 	  	if self.column < end_column
 	  		test_column = (self.column..end_column).to_a
 	  		test_column.delete(test_column.first)
-	  	elsif end_column < self.column
+	  	elsif self.column > end_column
 	  		test_column = (end_column..self.column).to_a.reverse
 	  		test_column.delete(test_column.first)
-	  		if test_column.is_a? Fixnum
-	  			test_column = [test_column]
-	  		end
 	  	else
 	  		return false
 	  	end
-
-	  	test_row.each_with_index do |value, index|
-			if (board[value][0][test_column[index]].is_a? Piece) &&
-				(value != end_row || test_column[index] != end_column)
-				return false
-			elsif (board[value][0][test_column[index]].is_a? Piece) &&
-				  (value == end_row && test_column[index] == end_column)
-				if board[value][0][test_column[index]].color == self.color
+	if test_row.length < test_column.length
+		  	test_row.each_with_index do |row, index|
+				if (board[row][0][test_column[index]].is_a? Piece) &&
+					(row != end_row || test_column[index] != end_column)
 					return false
-				elsif board[end_row][0][end_column].color != self.color
-					return true
+				elsif (board[row][0][test_column[index]].is_a? Piece) &&
+					  (row == end_row && test_column[index] == end_column)
+					if board[row][0][test_column[index]].color == self.color
+						return false
+					elsif board[end_row][0][end_column].color != self.color
+						return true
+					end
 				end
 			end
+			return true
+		else
+			test_column.each_with_index do |column, index|
+				if (board[test_row[index]][0][column].is_a? Piece) &&
+					(test_row[index] != end_row || column != end_column)
+					return false
+				elsif (board[test_row[index]][0][column].is_a? Piece) &&
+					  (test_row[index] == end_row && column == end_column)
+					if board[test_row[index]][0][column].color == self.color
+						return false
+					elsif board[end_row][0][end_column].color != self.color
+						return true
+					end
+				end
+			end
+			return true
 		end
-		return true
 	end
 
 	def logic(board, end_row, end_column)
