@@ -18,9 +18,9 @@ class Board
     attr_reader :board
     attr_reader :color
 
-    def find_piece(board, row, column)
-    	if board.board[row][0][column].is_a? Piece
-    		return board.board[row][0][column]
+    def find_piece(row, column)
+    	if self.board[row][0][column].is_a? Piece
+    		return self.board[row][0][column]
     	end
     end
 
@@ -44,18 +44,25 @@ class Board
 	end
 
 #Move function
-  def move_piece(piece, end_row, end_column)
-  	if valid_coord(end_row, end_column)
-		  	if piece.logic(self.board, end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
+  def move_piece(piece, end_row, end_column, turn)
+  	if valid_coord(end_row, end_column) && (turn == piece.color)
+		  	if (piece.logic(self.board, end_row, end_column)) && 
+		  	   (piece.check_collision(self.board, end_row, end_column))
 		  		replace_piece(piece, end_row, end_column)
-		  	elsif piece.type == "P" && piece.check_collision(self.board, end_row, end_column)
+		  		return true
+		  	elsif (piece.type == "P" || piece.type == "N" || piece.type == "K") && 
+		  		(piece.check_collision(self.board, end_row, end_column)) &&
+		  		(self.board[end_row][0][end_column].is_a? Piece)
 		  		replace_piece(piece, end_row, end_column)
+		  		return true
 		  	else
 		  		print "Invalid Move - Logic/Collision (#{piece.logic(self.board, end_row, end_column)},"
 		  		print " #{piece.check_collision(self.board, end_row, end_column)}) \n"
+				return false
 		  	end
 	 else
-	 	puts "Invalid Move - Coord"
+	 	puts "Invalid Move - Coord/Color"
+	 	return false
 	 end
   end
 

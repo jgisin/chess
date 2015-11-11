@@ -28,13 +28,43 @@ class Game
 	attr_accessor :rw1, :rw2, :nw1, :nw2, :bw1, :bw2, :qw1, :kw1
 	attr_accessor :pb1, :pb2, :pb3, :pb4, :pb5, :pb6, :pb7, :pb8
 	attr_accessor :rb1, :rb2, :nb1, :nb2, :bb1, :bb2, :qb1, :kb1
+
+	def turn(current_turn = "W")
+		if current_turn == "W"
+			return "B"
+		else
+			return "W"
+		end
+	end
+
+	def display_status(turn)
+		print "It is #{turn}'s turn\n"
+	end
+
+	def game_loop
+		row = 0
+		column = 0
+		current_turn = "W"
+		while (row != 10) && (column != 10)
+			b.display_board
+			display_status(current_turn)
+			puts "Select your piece. Row: "
+			row = gets.chomp.to_i
+			puts "Select your piece. Column: "
+			column = gets.chomp.to_i - 1
+			piece = b.find_piece(row, column)
+			puts "Where to move. Row: "
+			row = gets.chomp.to_i
+			puts "Where to move. Column: "
+			column = gets.chomp.to_i - 1
+			if b.move_piece(piece, row, column, current_turn)
+				current_turn = turn(current_turn)
+			end
+		end
+	end
 end
 
 g = Game.new
 
 
-g.b.move_piece(g.nw1, 3, 2)
-g.b.move_piece(g.nw1, 4, 4)
-g.b.move_piece(g.nw1, 6, 3)
-g.nw1.valid_moves(g.b, 1,1)
-g.b.display_board
+g.game_loop

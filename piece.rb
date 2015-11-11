@@ -404,14 +404,32 @@ class King < Piece
 	attr_reader :type
 	attr_accessor :in_check, :times_moved
 
-
-	def check_collision(board, end_row, end_column)
-		if board[end_row][0][end_column].is_a? Piece
-	  		return false
-	  	else
-	  		return true
-	  	end
+  def can_take?(board, end_row, end_column)
+  	if self.color == "W"
+  		if board[end_row][0][end_column].color == "B"
+  			return true
+  		end
+  	elsif self.color == "B"
+  		if board[end_row][0][end_column].color == "W"
+  			return true
+  		end
+  	else
+  		return false
   	end
+  end
+
+
+  def check_collision(board, end_row, end_column)
+  	if (board[end_row][0][end_column].is_a? Piece) &&
+  	   (self.can_take?(board, end_row, end_column) == false)
+  		return false
+  	elsif (board[end_row][0][end_column].is_a? Piece) &&
+  		  (self.can_take?(board, end_row, end_column))
+  		  return true
+  	else
+  		return true
+  	end
+  end
 
   	def logic(board, end_row, end_column)
   		if (self.row - end_row).abs == 1 && (self.column - end_column).abs == 1
