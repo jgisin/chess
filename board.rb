@@ -46,10 +46,12 @@ class Board
 #Move function
   def move_piece(piece, end_row, end_column)
   	if valid_coord(end_row, end_column)
-		  	if piece.logic(end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
+		  	if piece.logic(self.board, end_row, end_column) && piece.check_collision(self.board, end_row, end_column)
+		  		replace_piece(piece, end_row, end_column)
+		  	elsif piece.type == "P" && piece.check_collision(self.board, end_row, end_column)
 		  		replace_piece(piece, end_row, end_column)
 		  	else
-		  		print "Invalid Move - Logic/Collision (#{piece.logic(end_row, end_column)},"
+		  		print "Invalid Move - Logic/Collision (#{piece.logic(self.board, end_row, end_column)},"
 		  		print " #{piece.check_collision(self.board, end_row, end_column)}) \n"
 		  	end
 	 else

@@ -14,11 +14,11 @@ class Piece
 	def valid_moves(board, end_row, end_column)
 		board.board.each do |row, not_used|
 			board.board[row][0].each_with_index do |value, column|
-				if self.logic(row, column)
+				if self.logic(board.board, row, column)
 					print "#{row},#{column + 1} "
 					print "Logic Passes "
-					if (self.check_collision(board.board, row, column) == false) &&
-					   (value.is_a? Piece)
+					if ((self.check_collision(board.board, row, column) == false) &&
+					   (value.is_a? Piece))
 					    print "Collision-Non-Target \n"
 						next
 					elsif (self.check_collision(board.board, row, column) == false) &&
@@ -26,19 +26,24 @@ class Piece
 					      (self.color == value.color)
 					    print "Collision-Same-Color \n"
 						next
-					elsif (self.check_collision(board.board, row, column) == true) &&
+					elsif ((self.check_collision(board.board, row, column) == true) &&
 					      (value.is_a? Piece) &&
-					      (self.color != value.color)
+					      (self.color != value.color))
 					    print "Collision-Take \n"
 					else
 						print "No Collision \n"
 						next 
 					end
-				elsif self.logic(row, column) == false
-					print "#{row},#{column} "
+				elsif (self.logic(board.board, row, column) == false) &&
+					  (self.check_collision(board.board, row, column) == true) &&
+					  (self.type == "P") && (value.is_a? Piece)
+					  print "#{row},#{column + 1} "
+					  print "Collision-Take \n"
+				elsif self.logic(board.board, row, column) == false
+					print "#{row},#{column + 1} "
 					print "Logic Fails \n"
 				else
-					print "#{row},#{column} "
+					print "#{row},#{column + 1} "
 					print "Logic Fails \n"
 				end
 			end
@@ -61,67 +66,73 @@ class Pawn < Piece
 	attr_accessor :times_moved
 
   def check_collision(board, end_row, end_column)
-  	if board[end_row][0][end_column].is_a? Piece
+  	if (board[end_row][0][end_column].is_a? Piece) &&
+  		(can_take?(board, end_row, end_column) == false)
   		return false
+  	elsif (board[end_row][0][end_column].is_a? Piece) &&
+  		  (can_take?(board, end_row, end_column) == true)
+  		return true
   	else
   		return true
   	end
   end
 
-  def logic(end_row, end_column)
+  def logic(board, end_row, end_column)
   	#Pawn can move two squares on first move
   	if self.times_moved == 0
-	  	if self.color == "W"
-	  		if end_row - self.row <= 2 && end_row - self.row > 0
-	  			if end_column == self.column
-	  				return true
-	  			else
-	  				return false
-	  			end
-	  		else
-	  			return false
-	  		end
-	  	elsif self.color == "B"
-	  		if end_row - self.row >= -2 && end_row - self.row < 0
-	  			if end_column == self.column
-	  				return true
-	  			else
-	  				return false
-	  			end
-	  		else
-	  			return false
-	  		end
-	  	end
+		  	if self.color == "W"
+		  		if end_row - self.row <= 2 && end_row - self.row > 0
+		  			if end_column == self.column
+		  				return true
+		  			else
+		  				return false
+		  			end
+		  		else
+		  			return false
+		  		end
+		  	elsif self.color == "B"
+		  		if end_row - self.row >= -2 && end_row - self.row < 0
+		  			if end_column == self.column
+		  				return true
+		  			else
+		  				return false
+		  			end
+		  		else
+		  			return false
+		  		end
+		  	end
+		 
 	 else
 	 #Pawn moves only one square forward on all other moves
-	  	if self.color == "W"
-	  		if end_row - self.row == 1
-	  			if end_column == self.column
-	  				return true
-	  			else
-	  				return false
-	  			end
-	  		else
-	  			return false
-	  		end
-	  	elsif self.color == "B"
-	  		if end_row - self.row == -1 
-	  			if end_column == self.column
-	  				return true
-	  			else
-	  				return false
-	  			end
-	  		else
-	  			return false
-	  		end
-	  	end
+		  	if self.color == "W"
+		  		if end_row - self.row == 1
+		  			if end_column == self.column
+		  				return true
+		  			else
+		  				return false
+		  			end
+		  		else
+		  			return false
+		  		end
+		  	elsif self.color == "B"
+		  		if end_row - self.row == -1 
+		  			if end_column == self.column
+		  				return true
+		  			else
+		  				return false
+		  			end
+		  		else
+		  			return false
+		  		end
+		  	end
+		  
 	  end
   end
 
   def can_take?(board, end_row, end_column)
   	if self.color == "B"
 	  	if (end_row - self.row) == -1 && (self.column - end_column).abs == 1 
-			if self.check_collision(board, end_row, end_column) == false
+			if board[end_row][0][end_column].color != self.color
 				return true
 			else
 				return false
@@ -132,7 +143,7 @@ class Pawn < Piece
 	end
 	if self.color == "W"
 	  	if (end_row - self.row) == 1 && (self.column - end_column).abs == 1 
-			if self.check_collision(board, end_row, end_column) == false
+			if board[end_row][0][end_column].color != self.color
 				return true
 			else
 				return false
@@ -204,7 +215,7 @@ end
 	  end
   end
 
-  def logic(end_row, end_column)
+  def logic(board, end_row, end_column)
   		if self.column == end_column && self.row != end_row
   			return true
   		elsif self.row == end_row && self.column != end_column
@@ -250,7 +261,7 @@ class Knight < Piece
   	end
   end
 
-  def logic(end_row, end_column)
+  def logic(board, end_row, end_column)
   	if self.type == 'N'
 
   		if (self.row + 2 == end_row) || (self.row - 2 == end_row)
@@ -322,7 +333,7 @@ class Bishop < Piece
 		return true
 	end
 
-	def logic(end_row, end_column)
+	def logic(board, end_row, end_column)
 		if (self.column - end_column).abs == (self.row - end_row).abs
 			return true
 		else
@@ -357,7 +368,7 @@ class Queen < Piece
 		end
 	end
 
-	def logic(end_row, end_column)
+	def logic(board, end_row, end_column)
 		if (self.column - end_column).abs == (self.row - end_row).abs
 			return true
 		elsif self.column == end_column && self.row != end_row
@@ -392,7 +403,7 @@ class King < Piece
 	  	end
   	end
 
-  	def logic(end_row, end_column)
+  	def logic(board, end_row, end_column)
   		if (self.row - end_row).abs == 1 && (self.column - end_column).abs == 1
   			return true
   		elsif (self.row - end_row).abs == 1 && (self.column - end_column).abs == 0
