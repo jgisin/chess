@@ -69,7 +69,8 @@ class Board
 #Display Function
   def display_board
   	background = 0
-  	#puts `clear`
+  	puts `clear`
+  	puts "    1 2 3 4 5 6 7 8  C"
   	puts "R -------------------"
   	self.board.each do |key, array|
   		print "#{key} | "
@@ -102,14 +103,14 @@ class Board
 		  	    end
 		  	end
   		end
-  			  		 print "|\n"
+  			  		 print "| #{key}\n"
   			  		 if background == 1
   			  		 	background = 0
   			  		 else
   			  		 	background = 1
   			  		 end
   	end
-  	puts "  -------------------"
+  	puts "  ------------------- R"
   	puts "C   1 2 3 4 5 6 7 8"
   end
 end
