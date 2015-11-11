@@ -11,43 +11,47 @@ class Piece
 	attr_accessor :row, :column
 	attr_reader :color
 
-	def valid_moves(board, end_row, end_column)
+	def valid_moves(board)
+		take = []
 		board.board.each do |row, not_used|
 			board.board[row][0].each_with_index do |value, column|
 				if self.logic(board.board, row, column)
-					print "#{row},#{column + 1} "
-					print "Logic Passes "
+					#print "#{row},#{column + 1} "
+					#print "Logic Passes "
 					if ((self.check_collision(board.board, row, column) == false) &&
 					   (value.is_a? Piece))
-					    print "Collision-Non-Target \n"
+					    #print "Collision-Non-Target \n"
 						next
 					elsif (self.check_collision(board.board, row, column) == false) &&
 					      (board.board[row][0][column].is_a? Piece) &&
 					      (self.color == value.color)
-					    print "Collision-Same-Color \n"
+					    #print "Collision-Same-Color \n"
 						next
 					elsif ((self.check_collision(board.board, row, column) == true) &&
 					      (value.is_a? Piece) &&
 					      (self.color != value.color))
-					    print "Collision-Take \n"
+					    #print "Collision-Take \n"
+					    take << "#{row}#{column}".to_i
 					else
-						print "Collision Passes \n"
+						#print "Collision Passes \n"
 						next 
 					end
 				elsif (self.logic(board.board, row, column) == false) &&
 					  (self.check_collision(board.board, row, column) == true) &&
 					  (self.type == "P") && (value.is_a? Piece)
-					  print "#{row},#{column + 1} "
-					  print "Collision-Take \n"
+					  #print "#{row},#{column + 1} "
+					  #print "Collision-Take \n"
+					  take << "#{row}#{column}".to_i
 				elsif self.logic(board.board, row, column) == false
-					print "#{row},#{column + 1} "
-					print "Logic Fails \n"
+					#print "#{row},#{column + 1} "
+					#print "Logic Fails \n"
 				else
-					print "#{row},#{column + 1} "
-					print "Logic Fails \n"
+					#print "#{row},#{column + 1} "
+					#print "Logic Fails \n"
 				end
 			end
 		end
+		return take
 	end
 
 end
@@ -320,13 +324,14 @@ class Bishop < Piece
 	  	else
 	  		return false
 	  	end
-	if test_row.length < test_column.length
+
+		if test_row.length < test_column.length
 		  	test_row.each_with_index do |row, index|
 				if (board[row][0][test_column[index]].is_a? Piece) &&
 					(row != end_row || test_column[index] != end_column)
 					return false
 				elsif (board[row][0][test_column[index]].is_a? Piece) &&
-					  (row == end_row && test_column[index] == end_column)
+					  ((row == end_row) && (test_column[index] == end_column))
 					if board[row][0][test_column[index]].color == self.color
 						return false
 					elsif board[end_row][0][end_column].color != self.color
@@ -341,7 +346,7 @@ class Bishop < Piece
 					(test_row[index] != end_row || column != end_column)
 					return false
 				elsif (board[test_row[index]][0][column].is_a? Piece) &&
-					  (test_row[index] == end_row && column == end_column)
+					  ((test_row[index] == end_row) && (column == end_column))
 					if board[test_row[index]][0][column].color == self.color
 						return false
 					elsif board[end_row][0][end_column].color != self.color

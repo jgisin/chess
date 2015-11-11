@@ -29,6 +29,80 @@ class Game
 	attr_accessor :pb1, :pb2, :pb3, :pb4, :pb5, :pb6, :pb7, :pb8
 	attr_accessor :rb1, :rb2, :nb1, :nb2, :bb1, :bb2, :qb1, :kb1
 
+	def piece_of_color(color)
+		pieces = []
+		b.board.each do |row, not_used|
+			b.board[row][0].each_with_index do |piece, column|
+				if (piece.is_a? Piece) && (piece.color == color)
+					pieces << piece
+				end
+			end
+		end
+		return pieces
+	end
+
+	#Move function
+  def move_piece(piece, board, end_row, end_column, turn)
+  	if b.valid_coord(end_row, end_column) && (turn == piece.color) 
+		  	if (piece.logic(board.board, end_row, end_column)) && 
+		  	   (piece.check_collision(board.board, end_row, end_column))
+		  		b.replace_piece(piece, end_row, end_column)
+		  		return true
+
+
+		  	elsif ((piece.type == "P") || (piece.type == "N") || (piece.type == "K")) && 
+		  		(piece.check_collision(board.board, end_row, end_column)) &&
+		  		(board.board[end_row][0][end_column].is_a? Piece)
+		  		b.replace_piece(piece, end_row, end_column)
+		  		return true
+
+
+		  	else
+		  		print "Invalid Move - Logic/Collision (#{piece.logic(board.board, end_row, end_column)},"
+		  		print " #{piece.check_collision(board.board, end_row, end_column)}) \n"
+				return false
+		  	end
+
+
+	 else
+	 	puts "Invalid Move - Coord/Color"
+	 	return false
+	 end
+  end
+
+	def check?(turn)
+		if turn == "B"
+
+			possible = piece_of_color("W")
+			takes = []
+
+			possible.each do |white|
+				takes += white.valid_moves(b)
+			end
+
+			if takes.include? "#{kb1.row}#{kb1.column}".to_i
+				return true
+			else 
+				return false
+			end
+
+
+
+		else
+			possible = piece_of_color("B")
+			takes = []
+
+			possible.each do |black|
+				takes += black.valid_moves(b)
+			end
+			if takes.include? "#{kw1.row}#{kw1.column}".to_i
+				return true
+			else 
+				return false
+			end
+		end
+	end
+
 	def turn(current_turn = "W")
 		if current_turn == "W"
 			return "B"
@@ -48,16 +122,40 @@ class Game
 		while (row != 10) && (column != 10)
 			b.display_board
 			display_status(current_turn)
+
+			if check?(current_turn)
+				puts "Your are in check"
+			end
+
 			puts "Select your piece. Row: "
 			row = gets.chomp.to_i
 			puts "Select your piece. Column: "
 			column = gets.chomp.to_i - 1
 			piece = b.find_piece(row, column)
+			current_row = row
+			current_column = column
 			puts "Where to move. Row: "
 			row = gets.chomp.to_i
 			puts "Where to move. Column: "
 			column = gets.chomp.to_i - 1
-			if b.move_piece(piece, row, column, current_turn)
+				if (b.find_piece(row, column).is_a? Piece)
+					take_piece = b.find_piece(row, column)
+				else
+					take_piece = "_"
+				end
+			
+
+			if check?(current_turn) == true
+				if (move_piece(piece, b, row, column, current_turn)) &&
+					(check?(current_turn) == false)
+					current_turn = turn(current_turn)
+				else
+					print "You are still in check."
+					move_piece(piece, b, current_row, current_column, current_turn)
+					b.board[row][0][column] = take_piece
+				end
+			elsif (check?(current_turn) == false) &&
+			   (move_piece(piece, b, row, column, current_turn))
 				current_turn = turn(current_turn)
 			end
 		end
@@ -66,9 +164,5 @@ end
 
 g = Game.new
 
-g.b.move_piece(g.pw4, 4, 3, "W")
-g.b.move_piece(g.qw1, 3, 3, "W")
-g.b.move_piece(g.qw1, 4, 4, "W")
-g.qw1.valid_moves(g.b, 1, 1)
-g.b.display_board
-#g.game_loop
+
+g.game_loop
