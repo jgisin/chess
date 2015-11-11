@@ -22,7 +22,7 @@ class Piece
 					    print "Collision-Non-Target \n"
 						next
 					elsif (self.check_collision(board.board, row, column) == false) &&
-					      (value.is_a? Piece) &&
+					      (board.board[row][0][column].is_a? Piece) &&
 					      (self.color == value.color)
 					    print "Collision-Same-Color \n"
 						next
@@ -254,8 +254,12 @@ class Knight < Piece
 
 
   def check_collision(board, end_row, end_column)
-  	if board[end_row][0][end_column].is_a? Piece
+  	if (board[end_row][0][end_column].is_a? Piece) &&
+  	   (self.can_take?(board, end_row, end_column) == false)
   		return false
+  	elsif (board[end_row][0][end_column].is_a? Piece) &&
+  		  (self.can_take?(board, end_row, end_column))
+  		  return true
   	else
   		return true
   	end
@@ -303,6 +307,9 @@ class Bishop < Piece
 	  	elsif end_row < self.row
 	  		test_row = (end_row..self.row).to_a
 	  		test_row.delete(test_row.last)
+	  		if test_row.is_a? Fixnum
+	  			test_row = [test_row]
+	  		end
 	  	else
 	  		return false
 	  	end
@@ -313,6 +320,9 @@ class Bishop < Piece
 	  	elsif end_column < self.column
 	  		test_column = (end_column..self.column).to_a.reverse
 	  		test_column.delete(test_column.first)
+	  		if test_column.is_a? Fixnum
+	  			test_column = [test_column]
+	  		end
 	  	else
 	  		return false
 	  	end
@@ -360,8 +370,8 @@ class Queen < Piece
 	test_bishop = Bishop.new(self.row,self.column,"W")
 
 
-		if test_rook.check_collision(board, end_row, end_column) ||
-		   test_bishop.check_collision(board, end_row, end_column)
+		if (test_rook.check_collision(board, end_row, end_column)) ||
+		   (test_bishop.check_collision(board, end_row, end_column))
 		   return true
 		else
 			return false
