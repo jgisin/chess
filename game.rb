@@ -1,5 +1,6 @@
 require_relative 'piece'
 require_relative 'board'
+require 'byebug'
 
 
 
@@ -165,4 +166,10 @@ end
 g = Game.new
 
 
-g.game_loop
+g.move_piece(g.pb3, g.b, 5, 2, "B")
+
+g.move_piece(g.qb1, g.b, 5, 0, "B")
+#byebug
+g.move_piece(g.qb1, g.b, 2, 3, "B")
+g.qb1.valid_moves(g.b)
+g.b.display_board
