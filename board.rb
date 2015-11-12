@@ -42,29 +42,12 @@ class Board
 		  	 	piece.times_moved += 1
 		  	 end
 	end
+	
+	def test_replace(piece, end_row, end_column)
+		self.board[end_row][0][end_column] =  self.board[piece.row][0][piece.column]
+	  	 self.board[piece.row][0][piece.column] = '_'
+	end
 
-#Move function
-  def move_piece(piece, end_row, end_column, turn)
-  	if valid_coord(end_row, end_column) && (turn == piece.color)
-		  	if (piece.logic(self.board, end_row, end_column)) && 
-		  	   (piece.check_collision(self.board, end_row, end_column))
-		  		replace_piece(piece, end_row, end_column)
-		  		return true
-		  	elsif (piece.type == "P" || piece.type == "N" || piece.type == "K") && 
-		  		(piece.check_collision(self.board, end_row, end_column)) &&
-		  		(self.board[end_row][0][end_column].is_a? Piece)
-		  		replace_piece(piece, end_row, end_column)
-		  		return true
-		  	else
-		  		print "Invalid Move - Logic/Collision (#{piece.logic(self.board, end_row, end_column)},"
-		  		print " #{piece.check_collision(self.board, end_row, end_column)}) \n"
-				return false
-		  	end
-	 else
-	 	puts "Invalid Move - Coord/Color"
-	 	return false
-	 end
-  end
 
 #Display Function
   def display_board

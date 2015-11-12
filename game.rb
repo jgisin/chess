@@ -71,14 +71,33 @@ class Game
 	 end
   end
 
-	def check?(turn)
+  def test_move_piece(piece, board, end_row, end_column, turn)
+  	if board.valid_coord(end_row, end_column) && (turn == piece.color) 
+		  	if (piece.logic(board.board, end_row, end_column)) && 
+		  	   (piece.check_collision(board.board, end_row, end_column))
+		  		board.test_replace(piece, end_row, end_column)
+		  		return true
+		  	elsif ((piece.type == "P") || (piece.type == "N") || (piece.type == "K")) && 
+		  		(piece.check_collision(board.board, end_row, end_column)) &&
+		  		(board.board[end_row][0][end_column].is_a? Piece)
+		  		board.test_replace(piece, end_row, end_column)
+		  		return true
+		  	else
+				return false
+		  	end
+	 else
+	 	return false
+	 end
+  end
+
+	def check?(board, turn)
 		if turn == "B"
 
 			possible = piece_of_color("W")
 			takes = []
 
 			possible.each do |white|
-				takes += white.valid_moves(b)
+				takes += white.valid_moves(board, "take")
 			end
 
 			if takes.include? "#{kb1.row}#{kb1.column}".to_i
@@ -94,7 +113,7 @@ class Game
 			takes = []
 
 			possible.each do |black|
-				takes += black.valid_moves(b)
+				takes += black.valid_moves(board, "take")
 			end
 			if takes.include? "#{kw1.row}#{kw1.column}".to_i
 				return true
@@ -102,6 +121,71 @@ class Game
 				return false
 			end
 		end
+	end
+
+	def test_board(current_board)
+		test = Board.new
+
+		test.board.each do |row, not_used|
+			test.board[row][0].each_with_index do |piece, column|
+				test.board[row][0][column] = current_board.board[row][0][column]
+			end
+		end
+
+		return test
+	end
+
+	def checkmate?(turn)
+		valid = 0
+
+		if turn == "B"
+
+			possible = piece_of_color("W")
+			moves = []
+
+			possible.each do |white|
+				moves += white.valid_moves(b, "all")
+					moves.each do |move|
+						coord = move.to_s.split('')
+						#board = test_board
+						test_turn = turn(turn)
+						#byebug
+						test_move_piece(white, test_board(b), coord[0].to_i, coord[1].to_i, test_turn)
+						if check?(test_board(b), turn) == false
+							valid += 1
+						end
+					end
+				
+			end
+
+
+
+		else
+			possible = piece_of_color("B")
+			moves = []
+
+			possible.each do |black|
+				moves += black.valid_moves(b, "all")
+					moves.each do |move|
+						coord = move.to_s.split('')
+						#board = test_board(turn)
+						test_turn = turn(turn)
+						#byebug
+						test_move_piece(black, test_board(b), coord[0].to_i, coord[1].to_i, test_turn)
+						if check?(test_board(b), turn) == false
+							valid += 1
+						end
+					end
+				
+			end
+
+		end
+
+			if valid > 0
+				return false
+			else
+				return true
+			end
 	end
 
 	def turn(current_turn = "W")
@@ -112,6 +196,23 @@ class Game
 		end
 	end
 
+	def move(take_piece, current_turn)
+		if check?(b, current_turn) == true
+			if (move_piece(piece, b, row, column, current_turn)) &&
+				(check?(current_turn) == false)
+				current_turn = turn(current_turn)
+			else
+				print "You are still in check."
+				move_piece(piece, b, current_row, current_column, current_turn)
+				b.board[row][0][column] = take_piece
+			end
+		elsif (check?(b, current_turn) == false) &&
+		   (move_piece(piece, b, row, column, current_turn))
+			current_turn = turn(current_turn)
+		end
+	end
+
+
 	def display_status(turn)
 		print "It is #{turn}'s turn\n"
 	end
@@ -120,11 +221,11 @@ class Game
 		row = 0
 		column = 0
 		current_turn = "W"
-		while (row != 10) && (column != 10)
+		while checkmate?(current_turn) == false
 			b.display_board
 			display_status(current_turn)
 
-			if check?(current_turn)
+			if check?(b, current_turn)
 				puts "Your are in check"
 			end
 
@@ -144,32 +245,27 @@ class Game
 				else
 					take_piece = "_"
 				end
-			
-
-			if check?(current_turn) == true
-				if (move_piece(piece, b, row, column, current_turn)) &&
-					(check?(current_turn) == false)
+				if check?(b, current_turn) == true
+					if (move_piece(piece, b, row, column, current_turn)) &&
+						(check?(b, current_turn) == false)
+						current_turn = turn(current_turn)
+					else
+						print "You are still in check."
+						move_piece(piece, b, current_row, current_column, current_turn)
+						b.board[row][0][column] = take_piece
+					end
+				elsif (check?(b, current_turn) == false) &&
+				   (move_piece(piece, b, row, column, current_turn))
 					current_turn = turn(current_turn)
-				else
-					print "You are still in check."
-					move_piece(piece, b, current_row, current_column, current_turn)
-					b.board[row][0][column] = take_piece
 				end
-			elsif (check?(current_turn) == false) &&
-			   (move_piece(piece, b, row, column, current_turn))
-				current_turn = turn(current_turn)
-			end
+
 		end
+		b.display_board
+		puts "Checkmate! #{turn(current_turn)} wins!"
 	end
 end
 
 g = Game.new
 
 
-g.move_piece(g.pb3, g.b, 5, 2, "B")
-
-g.move_piece(g.qb1, g.b, 5, 0, "B")
-#byebug
-g.move_piece(g.qb1, g.b, 2, 3, "B")
-g.qb1.valid_moves(g.b)
-g.b.display_board
+g.game_loop

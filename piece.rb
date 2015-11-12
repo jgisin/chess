@@ -11,47 +11,54 @@ class Piece
 	attr_accessor :row, :column
 	attr_reader :color
 
-	def valid_moves(board)
-		take = []
+	def valid_moves(board, options)
+		result = []
 		board.board.each do |row, not_used|
 			board.board[row][0].each_with_index do |value, column|
 				if self.logic(board.board, row, column)
-					print "#{row},#{column + 1} "
-					print "Logic Passes "
+					#print "#{row},#{column + 1} "
+					#print "Logic Passes "
 					if ((self.check_collision(board.board, row, column) == false) &&
 					   (value.is_a? Piece))
-					    print "Collision-Non-Target \n"
+					    #print "Collision-Non-Target \n"
 						next
 					elsif (self.check_collision(board.board, row, column) == false) &&
 					      (board.board[row][0][column].is_a? Piece) &&
 					      (self.color == value.color)
-					    print "Collision-Same-Color \n"
+					    #print "Collision-Same-Color \n"
 						next
 					elsif ((self.check_collision(board.board, row, column) == true) &&
 					      (value.is_a? Piece) &&
 					      (self.color != value.color))
-					   	print "Collision-Take \n"
-					    take << "#{row}#{column}".to_i
+					   	#print "Collision-Take \n"
+					    if options == "take" || options == "all"
+					    	result << "#{row}#{column}".to_i
+						end
 					else
-						print "Collision Passes \n"
+						#print "Collision Passes \n"
+						if options == "all"
+							result << "#{row}#{column}".to_i
+						end
 						next 
 					end
 				elsif (self.logic(board.board, row, column) == false) &&
 					  (self.check_collision(board.board, row, column) == true) &&
 					  (self.type == "P") && (value.is_a? Piece)
-					  print "#{row},#{column + 1} "
-					  print "Collision-Take \n"
-					  take << "#{row}#{column}".to_i
+					  #print "#{row},#{column + 1} "
+					  #print "Collision-Take \n"
+					  if options == "take" || options == "all"
+					  	result << "#{row}#{column}".to_i
+					  end
 				elsif self.logic(board.board, row, column) == false
-					print "#{row},#{column + 1} "
-					print "Logic Fails \n"
+					#print "#{row},#{column + 1} "
+					#print "Logic Fails \n"
 				else
-					print "#{row},#{column + 1} "
-					print "Logic Fails \n"
+					#print "#{row},#{column + 1} "
+					#print "Logic Fails \n"
 				end
 			end
 		end
-		return take
+		return result
 	end
 
 end
