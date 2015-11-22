@@ -42,6 +42,27 @@ class Game
 		return pieces
 	end
 
+def row(param)
+	case param
+	when "A"
+		return 1
+	when "B"
+		return 2
+	when "C"
+		return 3
+	when "D"
+		return 4
+	when "E"
+		return 5
+	when "F"
+		return 6
+	when "G"
+		return 7
+	when "H"
+		return 8
+	end
+end
+
 	#Move function
   def move_piece(piece, board, end_row, end_column, turn)
   	if b.valid_coord(end_row, end_column) && (turn == piece.color) 
@@ -212,6 +233,14 @@ class Game
 		end
 	end
 
+	def img_tag(piece)
+		if piece.is_a? Piece
+			return "chess/#{piece.color}#{piece.type}"
+		else
+			return "chess/default"
+		end
+	end
+
 
 	def display_status(turn)
 		print "It is #{turn}'s turn\n"
@@ -281,7 +310,3 @@ class Game
 	end
 end
 
-g = Game.new
-
-
-g.game_loop
