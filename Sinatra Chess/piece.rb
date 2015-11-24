@@ -12,6 +12,17 @@ class Piece
 	attr_accessor :row, :column, :selected
 	attr_reader :color
 
+	def can_move?(board, end_row, end_column)
+		if self.logic(board, end_row, end_column) && 
+			self.check_collision(board, end_row, end_column)
+			return true
+		else
+			return false
+		end
+	end
+
+
+
 	def valid_moves(board, options)
 		result = []
 		board.board.each do |row, not_used|

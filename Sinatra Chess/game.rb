@@ -42,6 +42,8 @@ class Game
 		return pieces
 	end
 
+
+
 def row(param)
 	case param
 	when "A"
