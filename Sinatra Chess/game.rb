@@ -149,7 +149,7 @@ end
 	def test_board(current_board)
 		test = Board.new
 
-		test.board.each do |row, not_used|
+		test.board.each do |row, na|
 			test.board[row][0].each_with_index do |piece, column|
 				test.board[row][0][column] = current_board.board[row][0][column]
 			end

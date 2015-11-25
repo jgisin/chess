@@ -9,7 +9,9 @@ require_relative 'game'
 enable :sessions
 
 get '/' do
-
+	#if g.checkmate?(current_turn) == true
+		#redirect("/final")
+	#end
 	session['b'] = g.b
 	query = params.map{|key, value| "#{key}=#{value}"}.join("&")
 	if (params["Row"] != nil) && (params["Column"] != nil) &&
@@ -57,6 +59,12 @@ get '/move' do
 	end
 
 	erb :move, :locals => {:g => g, :selected_piece => session['c'], :current_turn => current_turn}
+end
+
+get '/final' do
+
+	erb :final, :locals => {:g => g, :selected_piece => session['c'], :current_turn => current_turn}
+
 end
 
 

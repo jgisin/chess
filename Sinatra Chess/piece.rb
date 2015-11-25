@@ -61,12 +61,6 @@ class Piece
 					  if options == "take" || options == "all"
 					  	result << "#{row}#{column}".to_i
 					  end
-				elsif self.logic(board.board, row, column) == false
-					#print "#{row},#{column + 1} "
-					#print "Logic Fails \n"
-				else
-					#print "#{row},#{column + 1} "
-					#print "Logic Fails \n"
 				end
 			end
 		end
