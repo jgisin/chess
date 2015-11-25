@@ -22,7 +22,7 @@
 
 <div class = "board">
 	<!-- Row A (Row 1 in game.rb) -->
-<% session['b'].board[1][0].each_with_index do |piece, index| %>
+<% g.b.board[1][0].each_with_index do |piece, index| %>
 <a href = "<%= piece?(piece) %>" > 
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "White" : "Black" %> "> 
 </a>
@@ -30,31 +30,31 @@
 <br />
 
 	<!-- Row B (Row 2 in game.rb) -->
-<% session['b'].board[2][0].each_with_index do |piece, index| %>
-<a href = "<%= piece?(piece) %>" >
+<% g.b.board[2][0].each_with_index do |piece, index| %>
+<a href = "<%= piece?(g.b.board[2][0][index]) %>" >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "Black" : "White" %> ">
 </a>
 <% end %>
 <br />
 
 	<!-- Row C (Row 2 in game.rb) -->
-<% session['b'].board[3][0].each_with_index do |piece, index| %>
-<a href = <%= piece?(piece) %> >
+<% g.b.board[3][0].each_with_index do |piece, index| %>
+<a href = "<%= piece?(g.b.board[3][0][index]) %>" >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "White" : "Black" %> ">
 </a>
 <% end %>
 <br />
 
 	<!-- Row D (Row 2 in game.rb) -->
-<% session['b'].board[4][0].each_with_index do |piece, index| %>
-<a href = <%= piece?(piece) %> >
+<% g.b.board[4][0].each_with_index do |piece, index| %>
+<a href = "<%= piece?(piece) %>" >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "Black" : "White" %> ">
 </a>
 <% end %>
 <br />
 
 	<!-- Row E (Row 2 in game.rb) -->
-<% session['b'].board[5][0].each_with_index do |piece, index| %>
+<% g.b.board[5][0].each_with_index do |piece, index| %>
 <a href = <%= piece?(piece) %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "White" : "Black" %> ">
 </a>
@@ -62,7 +62,7 @@
 <br />
 
 	<!-- Row F (Row 2 in game.rb) -->
-<% session['b'].board[6][0].each_with_index do |piece, index| %>
+<% g.b.board[6][0].each_with_index do |piece, index| %>
 <a href = "<%= piece?(piece) %>" >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "Black" : "White" %> ">
 </a>
@@ -70,7 +70,7 @@
 <br />
 
 	<!-- Row G (Row 2 in game.rb) -->
-<% session['b'].board[7][0].each_with_index do |piece, index| %>
+<% g.b.board[7][0].each_with_index do |piece, index| %>
 <a href = <%= piece?(piece) %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "White" : "Black" %> ">
 </a>
@@ -78,7 +78,7 @@
 <br />
 
 	<!-- Row H (Row 2 in game.rb) -->
-<% session['b'].board[8][0].each_with_index do |piece, index| %>
+<% g.b.board[8][0].each_with_index do |piece, index| %>
 <a href = <%= piece?(piece) %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "Black" : "White" %> ">
 </a>
@@ -102,11 +102,7 @@
 
 <div class = "form">
 	<h1>Chess</h1>
-	<form>
-		<input type='text' name='Row'/>
-		<input type='text' name='Column'/>
-		<input type='submit' value='Value'/>
-	</form>
+	<h2>Current Turn: <%= current_turn %></h2>
 </div>
 
 </body>

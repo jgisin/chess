@@ -74,7 +74,7 @@ end
 		  		return true
 
 
-		  	elsif ((piece.type == "P") || (piece.type == "N") || (piece.type == "K")) && 
+		  	elsif (piece.type == "P") && 
 		  		(piece.check_collision(board.board, end_row, end_column)) &&
 		  		(board.board[end_row][0][end_column].is_a? Piece)
 		  		b.replace_piece(piece, end_row, end_column)

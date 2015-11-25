@@ -22,7 +22,7 @@
 
 <div class = "board">
 	<!-- Row A (Row 1 in game.rb) -->
-<% session['b'].board[1][0].each_with_index do |piece, index| %>
+<% g.b.board[1][0].each_with_index do |piece, index| %>
 <a href = <%= "/move?End_Row=1&End_Column=#{index}" %> > 
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "White" : "Black" %> "
 id = "<%= selector(selected_piece, piece) %>" > 
@@ -31,7 +31,7 @@ id = "<%= selector(selected_piece, piece) %>" >
 <br />
 
 	<!-- Row B (Row 2 in game.rb) -->
-<% session['b'].board[2][0].each_with_index do |piece, index| %>
+<% g.b.board[2][0].each_with_index do |piece, index| %>
 <a href = "<%= "/move?End_Row=2&End_Column=#{index}" %>" >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "Black" : "White" %> "
 id = "<%= selector(selected_piece, piece) %>" >
@@ -40,7 +40,7 @@ id = "<%= selector(selected_piece, piece) %>" >
 <br />
 
 	<!-- Row C (Row 2 in game.rb) -->
-<% session['b'].board[3][0].each_with_index do |piece, index| %>
+<% g.b.board[3][0].each_with_index do |piece, index| %>
 <a href = <%= "/move?End_Row=3&End_Column=#{index}" %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "White" : "Black" %> "
 id = "<%= selector(selected_piece, piece) %>" >
@@ -49,7 +49,7 @@ id = "<%= selector(selected_piece, piece) %>" >
 <br />
 
 	<!-- Row D (Row 2 in game.rb) -->
-<% session['b'].board[4][0].each_with_index do |piece, index| %>
+<% g.b.board[4][0].each_with_index do |piece, index| %>
 <a href = <%= "/move?End_Row=4&End_Column=#{index}" %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "Black" : "White" %> "
 id = "<%= selector(selected_piece, piece) %>" >
@@ -58,7 +58,7 @@ id = "<%= selector(selected_piece, piece) %>" >
 <br />
 
 	<!-- Row E (Row 2 in game.rb) -->
-<% session['b'].board[5][0].each_with_index do |piece, index| %>
+<% g.b.board[5][0].each_with_index do |piece, index| %>
 <a href = <%= "/move?End_Row=5&End_Column=#{index}" %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "White" : "Black" %> "
 id = "<%= selector(selected_piece, piece) %>" >
@@ -67,7 +67,7 @@ id = "<%= selector(selected_piece, piece) %>" >
 <br />
 
 	<!-- Row F (Row 2 in game.rb) -->
-<% session['b'].board[6][0].each_with_index do |piece, index| %>
+<% g.b.board[6][0].each_with_index do |piece, index| %>
 <a href = <%= "/move?End_Row=6&End_Column=#{index}" %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "Black" : "White" %> "
 id = "<%= selector(selected_piece, piece) %>" >
@@ -76,7 +76,7 @@ id = "<%= selector(selected_piece, piece) %>" >
 <br />
 
 	<!-- Row G (Row 2 in game.rb) -->
-<% session['b'].board[7][0].each_with_index do |piece, index| %>
+<% g.b.board[7][0].each_with_index do |piece, index| %>
 <a href = <%= "/move?End_Row=7&End_Column=#{index}" %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "White" : "Black" %> "
 id = "<%= selector(selected_piece, piece) %>" >
@@ -85,7 +85,7 @@ id = "<%= selector(selected_piece, piece) %>" >
 <br />
 
 	<!-- Row H (Row 2 in game.rb) -->
-<% session['b'].board[8][0].each_with_index do |piece, index| %>
+<% g.b.board[8][0].each_with_index do |piece, index| %>
 <a href = <%= "/move?End_Row=8&End_Column=#{index}" %> >
 <img src = "<%= g.img_tag(piece) %>.png" class = "<%= index % 2 == 0 ? "Black" : "White" %> "
 id = "<%= selector(selected_piece, piece) %>" >
@@ -108,11 +108,9 @@ id = "<%= selector(selected_piece, piece) %>" >
 </div>
 
 <div class = "form">
-	<form>
-		<input type='text' name='End_Row' autofocus/>
-		<input type='text' name='End_Column' autofocus/>
-		<input type='submit' value='Value'/>
-	</form>
+	<h1>Chess</h1>
+	<h2>Current Turn: <%= current_turn %></h2>
+	<a href = "/">Deselect Piece</a>
 </div>
 
 </body>
